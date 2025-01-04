@@ -1,10 +1,7 @@
-import { Schema } from "mongoose";
-import { TStudent } from "./student.interface";
+import { model, Schema } from "mongoose";
+import { TGuardian, TLocalGuardian, TStudent, TUserName } from "./student.interface";
 
-
-const studentSchema = new Schema<TStudent>({
-    id:{ type:String },
-    name:{
+const userNameSchema = new Schema<TUserName>({
         firstName:{
             type:String,
             required:true,
@@ -15,17 +12,11 @@ const studentSchema = new Schema<TStudent>({
         lastName:{
             type:String,
             required:true,
-        }
-    },
-    gender:["male","female"],
-    dateOfBirth:{ type: String },
-    email: { type: String, required:true },
-    contactNo:{ type:String, required:true},
-    emergencyContactNo:{ type:String, required:true},
-    bloodGroup:["A+","A-","B+","B-","AB+","AB-","O+","O-"],
-    presentAddress:{ type:String, required:true},
-    permanentAddress:{ type:String, required:true},
-    guardian:{
+        },
+})
+
+const guardianSchema = new Schema<TGuardian>(
+    {
         fatherName:{
             type:String,
             required:true,
@@ -50,8 +41,11 @@ const studentSchema = new Schema<TStudent>({
             type:String,
             required:true,
         },
-    },
-    localGuardian:{
+    }
+)
+
+const localGuardianSchema = new Schema<TLocalGuardian>(
+    {
         name:{
             type:String,
             required:true,
@@ -68,7 +62,24 @@ const studentSchema = new Schema<TStudent>({
             type:String,
             required:true
         }
-    },
+    }
+)
+
+const studentSchema = new Schema<TStudent>({
+    id:{ type:String },
+    name:userNameSchema,
+    gender:["male","female"],
+    dateOfBirth:{ type: String },
+    email: { type: String, required:true },
+    contactNo:{ type:String, required:true},
+    emergencyContactNo:{ type:String, required:true},
+    bloodGroup:['A+','A-','B+','B-','AB+','AB-','O+','O-'],
+    presentAddress:{ type:String, required:true},
+    permanentAddress:{ type:String, required:true},
+    guardian:guardianSchema,
+    localGuardian:localGuardianSchema,
     profileImg:{ type: String },
     isActive:['active','blocked']
 })
+
+export const StudentModel = model<TStudent>('Student', studentSchema);
