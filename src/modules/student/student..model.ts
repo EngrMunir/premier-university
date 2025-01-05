@@ -5,6 +5,15 @@ const userNameSchema = new Schema<TUserName>({
         firstName:{
             type:String,
             required:[true,'First name is required'],
+            trim:true,
+            maxlength:[20, 'First Name can not be more than 20 character'],
+            validate: {
+                validator: function(value: string){
+                    const firstNameStr = value.charAt(0).toUpperCase() + value.slice(1);
+                    return firstNameStr === value;
+                },
+                message:`{VALUE} is not in capitalize format`
+            }
         },
         middleName:{
             type:String,
