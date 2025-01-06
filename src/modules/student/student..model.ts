@@ -90,7 +90,7 @@ const localGuardianSchema = new Schema<TLocalGuardian>(
 const studentSchema = new Schema<TStudent,StudentModel>({
     id:{ type:String, required:true, unique:true },
     password:{ type:String, required:[true, 'Password is required'],
-         unique:true, maxlength:[20,'password can not be more than 20 characters']},
+          maxlength:[20,'password can not be more than 20 characters']},
     name:{
         type:userNameSchema,
         required:[true,'name is required'],
@@ -134,6 +134,10 @@ const studentSchema = new Schema<TStudent,StudentModel>({
         type:String,
         enum:['active','blocked'],
         default:'active',
+    },
+    isDeleted:{
+        type:Boolean,
+        default:false
     }
 });
 
@@ -149,11 +153,15 @@ studentSchema.pre('save', async function(next){
 })
 
 // post save middleware /hook
-studentSchema.post('save', function(){
-    console.log(this,'post hook: after save data')
+studentSchema.post('save', function(doc, next){
+    doc.password='';
+    next()
 })
 
-
+// query middleware
+studentSchema.pre('find', function(next){
+    this.find
+})
 
 
 
