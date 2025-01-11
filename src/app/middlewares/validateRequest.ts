@@ -10,11 +10,10 @@ import { AnyZodObject } from "zod";
          await schema.parseAsync({
             body:req.body
         })
+        next()
         } catch (err) {
             next(err);
         }
-    
-        next()
     }
     }
 
