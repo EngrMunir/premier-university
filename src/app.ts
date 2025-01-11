@@ -1,9 +1,9 @@
 
 import express, { Application, Request, Response } from 'express'
 import cors from 'cors'
-import { StudentRoutes } from './modules/student/student.route'
-import { UserRoutes } from './modules/user/user.route'
+import router from './app/routes';
 import globalErrorHandler from './app/middlewares/globalErrorHandler'
+import notFound from './app/middlewares/notFound'
 export const app:Application = express()
 
 // parsers
@@ -12,13 +12,20 @@ app.use(cors());
 
 // application routes
 
-app.use('/api/v1/users', UserRoutes);
-app.use('/api/v1/students', StudentRoutes);
+app.use('/api/v1', router);
+
+const test =(req:Request, res:Response) =>{
+  const a =10;
+  res.send(a);
+};
+
+app.get('/',test);
 
 app.get('/', (req:Request, res:Response) => {
   res.send('Hello World!')
 })
 
 app.use(globalErrorHandler);
+app.use(notFound);
 
 export default app;
