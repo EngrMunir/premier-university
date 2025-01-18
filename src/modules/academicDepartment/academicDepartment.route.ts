@@ -16,7 +16,7 @@ router.post('/create-academic-department',
     );
     router.patch(
         '/:departmentId',
-        validateRequest(AcademicDepartmentValidation.updateAcademicDepartmentValidationSchema),
+        // validateRequest(AcademicDepartmentValidation.updateAcademicDepartmentValidationSchema),
         AcademicDepartmentControllers.updateAcademicDepartment,
     );
     
