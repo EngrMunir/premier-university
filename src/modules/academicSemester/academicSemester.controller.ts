@@ -26,7 +26,7 @@ const createAcademicSemester =catchAsync(async(req, res)=>{
     sendResponse(res, {
         statusCode:httpStatus.OK,
         success:true,
-        message:'Academic semester is retrived successfully',
+        message:'Academic semesters are retrieved successfully',
         data:result,
     })
  })
@@ -37,7 +37,7 @@ const createAcademicSemester =catchAsync(async(req, res)=>{
     sendResponse(res, {
         statusCode:httpStatus.OK,
         success:true,
-        message:'Academic semester is retrived successfully',
+        message:'Academic semester is retrieved successfully',
         data:result,
     })
  })

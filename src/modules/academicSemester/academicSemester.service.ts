@@ -14,7 +14,7 @@ const createAcademicSemesterIntoDB = async( payload:TAcademicSemester )=>{
 }
 
 const getAllAcademicSemestersFromDB = async ()=>{
-    const result = await AcademicSemester.findById(id);
+    const result = await AcademicSemester.find();
     return result;
 };
 
