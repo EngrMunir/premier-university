@@ -5,8 +5,33 @@ import httpStatus from 'http-status';
 import { User } from "../user/user.model";
 import { TStudent } from "./student.interface";
 
-const getAllStudentsFromDB = async ()=>{
-    const result = await Student.find()
+const getAllStudentsFromDB = async (query:Record<string, unknown>)=>{
+
+    const queryObj = {...query};
+
+    // { email :{$regex:query.searchTerm, $options:i } }
+    // { presentAddress :{$regex:query.searchTerm, $options:i } }
+    // { 'name.firstName :{$regex:query.searchTerm, $options:i } }
+
+    const studentSearchableFields =['email','name.firstName','presentAddress']
+    let searchTerm ='';
+    if(query?.searchTerm){
+        searchTerm = query?.searchTerm as string;
+    }
+
+    const searchQuery = Student.find({
+        $or:studentSearchableFields.map((field) =>({
+            [field]:{$regex:searchTerm, $options:'i'},
+        }))
+    });
+
+    // filtering
+    const excludeFields =['searchTerm','sort','limit','page','fields']
+
+    excludeFields.forEach(el => delete queryObj[el]);
+
+    const filterQuery = searchQuery
+    .find(queryObj)
     .populate('admissionSemester')
     .populate({
         path:'academicDepartment',
@@ -14,7 +39,43 @@ const getAllStudentsFromDB = async ()=>{
             path:'academicFaculty',
         }
     });
-    return result;
+
+    let sort ='-createdAt';
+    if(query.sort){
+        sort =query.sort as string;
+    }
+
+    const sortQuery = filterQuery.sort(sort);
+
+    let page = 1;
+    let limit =1;
+    let skip =0;
+
+    if(query.limit){
+        limit = Number(query.limit);
+    }
+
+    if(query.page){
+        page = Number(query.page)
+        skip =(page-1)*limit
+    }
+    const paginateQuery = sortQuery.skip(skip);
+   
+    const limitQuery = paginateQuery.limit(limit);
+
+
+    // field limiting
+    let fields ='-__v';
+    // fields:'name, email'
+    // fields:'name email'
+    if(query.fields){
+        fields =(query.fields as string).split(',').join(' ')
+        console.log({fields});
+    }
+
+    const fieldQuery = await limitQuery.select(fields);
+
+    return fieldQuery;
 }
 
 const getSingleStudentFromDB = async (id:string)=>{
