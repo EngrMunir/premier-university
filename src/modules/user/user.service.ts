@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import config from "../../app/config";
 import { AcademicSemester } from "../academicSemester/academicSemester.modal";
 import { Student } from "../student/student..model";
 import { TStudent } from "../student/student.interface";
@@ -8,6 +7,7 @@ import { User } from "./user.model";
 import { generateStudentId } from "./user.utils";
 import AppError from "../../app/errors/AppError";
 import httpStatus from 'http-status';
+import config from "../../app/config";
 
 const createStudentIntoDB =async(password:string, payload:TStudent)=>{
 
