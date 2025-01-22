@@ -1,4 +1,4 @@
-import express from 'express';
+import express from 'express'
 import validateRequest from '../../app/middlewares/validateRequest';
 import { SemesterRegistrationValidations } from './semesterRegistration.validation';
 import { SemesterRegistrationController } from './semesterRegistration.controller';
@@ -17,7 +17,10 @@ import { SemesterRegistrationController } from './semesterRegistration.controlle
     SemesterRegistrationController.getSingleSemesterRegistration,
  );
 
- router.patch('/:id',SemesterRegistrationController.updateSemesterRegistration);
+ router.patch(
+   '/:id',
+   validateRequest(SemesterRegistrationValidations.updateSemesterRegistrationValidationSchema),
+   SemesterRegistrationController.updateSemesterRegistration);
 
  router.get('/',SemesterRegistrationController.getAllSemesterRegistrations);
 
